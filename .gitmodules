@@ -2,3 +2,6 @@
 	path = godot-cpp
 	url = https://github.com/godotengine/godot-cpp
 	branch = 3.x
+[submodule "clip"]
+	path = clip
+	url = https://github.com/dacap/clip.git
