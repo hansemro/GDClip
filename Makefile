@@ -15,3 +15,9 @@ prep: clip godot-cpp
 .PHONY: build
 build: prep
 	scons platform=${PLATFORM}
+
+.PHONY: clean
+clean:
+	-rm demo/bin/*/*
+	-rm clip/*.os
+	-rm src/*.os
