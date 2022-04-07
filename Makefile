@@ -9,7 +9,7 @@ all: build
 clip:
 	git submodule update --init clip
 godot-cpp:
-	git submodule update --init godot-cpp
+	git submodule update --init --recursive godot-cpp
 	cd godot-cpp && scons platform=${PLATFORM} generate_bindings=yes -j${NPROC}
 prep: clip godot-cpp
 
