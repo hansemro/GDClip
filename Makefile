@@ -1,6 +1,16 @@
 # Platform options: linux, osx, windows
 PLATFORM ?= linux
 NPROC ?= 4
+# Target options: debug, release
+TARGET ?= debug
+
+MINGW64_PREFIX=x86_64-w64-mingw32-
+CXXFLAGS = -std=c++14 -fPIC -I. -Igodot-cpp/ -Igodot-cpp/godot-headers -Igodot-cpp/include -Igodot-cpp/include/gen -Igodot-cpp/include/core -Iclip/
+CLIP_CXXFLAGS = -std=c++14 -fPIC -Iclip/
+LIBS = -Lgodot-cpp/bin
+WIN64_LIBFLAGS = ${LIBS} -lgodot-cpp.windows.${TARGET}.64 -lshlwapi -lwindowscodecs -lole32 -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
+LINUX_LIBFLAGS = ${LIBS} -lgodot-cpp.linux.${TARGET}.64 -lpng -lpthread -lxcb
+OSX_LIBFLAGS = ${LIBS} -lgodot-cpp.osx.${TARGET}.x86_64 -Wl,-framework,Cocoa
 
 .PHONY: all
 all: build
@@ -10,15 +20,61 @@ clip/*:
 	git submodule update --init clip
 godot-cpp/*:
 	git submodule update --init --recursive godot-cpp
-	cd godot-cpp && scons platform=${PLATFORM} generate_bindings=yes -j${NPROC}
+godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a:
+	cd godot-cpp && CC=${MINGW64_PREFIX}gcc CXX=${MINGW64_PREFIX}g++ scons platform=windows target=${TARGET} generate_bindings=yes -j${NPROC}
+godot-cpp/bin/libgodot-cpp.linux.${TARGET}.64.a:
+	cd godot-cpp && scons platform=linux target=${TARGET} generate_bindings=yes -j${NPROC}
+godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a:
+	cd godot-cpp && scons macos_arch=x86_64 platform=osx target=${TARGET} generate_bindings=yes -j${NPROC}
 prep: clip/* godot-cpp/*
 
-.PHONY: build
-build: prep
-	scons platform=${PLATFORM}
+.PHONY: build build_linux build_windows
+build: prep build_${PLATFORM}
+
+build_linux: godot-cpp/bin/libgodot-cpp.linux.${TARGET}.64.a bin/libgdclip.so
+clip/%.linux.o: clip/%.cpp
+	g++ $(CLIP_CXXFLAGS) -DHAVE_PNG_H -o $@ -c $^
+src/%.linux.o: src/%.cpp
+	g++ $(CXXFLAGS) -o $@ -c $<
+bin/libgdclip.so: src/gdclip.linux.o src/gdlibrary.linux.o clip/clip.linux.o clip/clip_x11.linux.o clip/image.linux.o
+	mkdir -p bin
+	g++ $(CXXFLAGS) -shared -o $@ $^ ${LINUX_LIBFLAGS}
+	mkdir -p demo/bin/x11
+	cp $@ demo/bin/x11/
+
+build_windows: godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a bin/libgdclip.dll
+clip/%.windows.o: clip/%.cpp
+	${MINGW64_PREFIX}g++ $(CLIP_CXXFLAGS) -o $@ -c $^
+src/%.windows.obj: src/%.cpp
+	${MINGW64_PREFIX}g++ $(CXXFLAGS) -o $@ -c $^
+bin/libgdclip.dll: src/gdclip.windows.o src/gdlibrary.windows.o clip/clip.windows.o clip/clip_win.windows.o clip/image.windows.o
+	mkdir -p bin
+	${MINGW64_PREFIX}g++ $(CXXFLAGS) -shared -o $@ $^ ${WIN64_LIBFLAGS}
+	mkdir -p demo/bin/win64
+	cp $@ demo/bin/win64/
+
+build_osx: godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a bin/libgdclip.dylib
+clip/%.osx.o: clip/%.cpp
+	g++ $(CLIP_CXXFLAGS) -o $@ -c $^
+clip/%.osx.o: clip/%.mm
+	g++ $(CLIP_CXXFLAGS) -o $@ -c $^
+src/%.osx.o: src/%.cpp
+	g++ $(CXXFLAGS) -o $@ -c $<
+bin/libgdclip.dylib: src/gdclip.osx.o src/gdlibrary.osx.o clip/clip.osx.o clip/clip_osx.osx.o clip/image.osx.o
+	mkdir -p bin
+	g++ $(CXXFLAGS) -shared -o $@ $^ ${OSX_LIBFLAGS}
+	mkdir -p demo/bin/osx
+	cp $@ demo/bin/osx/
 
 .PHONY: clean
 clean:
 	-rm demo/bin/*/*
-	-rm clip/*.os
-	-rm src/*.os
+	-rm clip/*.o*
+	-rm src/*.o*
+	-rm godot-cpp/bin/*
+.PHONY: clean
+clean:
+	-rm demo/bin/*/*
+	-rm clip/*.o*
+	-rm src/*.o*
+	-rm godot-cpp/bin/*
