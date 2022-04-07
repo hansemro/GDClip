@@ -6,12 +6,12 @@ NPROC ?= 4
 all: build
 
 .PHONY: prep
-clip:
+clip/*:
 	git submodule update --init clip
-godot-cpp:
+godot-cpp/*:
 	git submodule update --init --recursive godot-cpp
 	cd godot-cpp && scons platform=${PLATFORM} generate_bindings=yes -j${NPROC}
-prep: clip godot-cpp
+prep: clip/* godot-cpp/*
 
 .PHONY: build
 build: prep
