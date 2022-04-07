@@ -1,3 +1,4 @@
+# Platform options: linux, osx, windows
 PLATFORM ?= linux
 NPROC ?= 4
 
