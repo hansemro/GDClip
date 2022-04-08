@@ -11,6 +11,7 @@ using namespace godot;
 void GDClip::_register_methods() {
     register_method("clear", &GDClip::clear);
     register_method("get_text", &GDClip::get_text);
+    register_method("set_text", &GDClip::set_text);
     register_method("has_image", &GDClip::has_image);
     register_method("get_image_size", &GDClip::get_image_size);
     register_method("get_image_as_pbarray", &GDClip::get_image_as_pbarray);
@@ -44,6 +45,13 @@ String GDClip::get_text() {
         return String(text.c_str());
 
     return String();
+}
+
+/*
+ * Set text in clipboard and returns true if successful.
+ */
+bool GDClip::set_text(String text) {
+    return clip::set_text(text.utf8().get_data());
 }
 
 /*

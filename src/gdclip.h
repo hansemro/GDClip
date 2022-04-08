@@ -27,6 +27,8 @@ public:
 
     String get_text();
 
+    bool set_text(String text);
+
     bool has_image();
 
     PoolIntArray get_image_size();
