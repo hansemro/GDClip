@@ -198,6 +198,7 @@ func test_set_image_from_pbarray_1():
 	assert(!gdclip.set_image_from_pbarray([], 0, 0))
 	assert(!gdclip.set_image_from_pbarray([], 0, 2))
 	assert(!gdclip.set_image_from_pbarray([], 2, 0))
+	assert(!gdclip.set_image_from_pbarray([255, 255, 255, 0], 0, 0))
 
 # Return false if PoolByteArray size is less than width*height*4
 func test_set_image_from_pbarray_2():
