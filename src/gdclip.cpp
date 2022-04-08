@@ -15,6 +15,7 @@ void GDClip::_register_methods() {
     register_method("has_image", &GDClip::has_image);
     register_method("get_image_size", &GDClip::get_image_size);
     register_method("get_image_as_pbarray", &GDClip::get_image_as_pbarray);
+    register_method("set_image_from_pbarray", &GDClip::set_image_from_pbarray);
 }
 
 GDClip::GDClip() {
@@ -99,4 +100,37 @@ PoolByteArray GDClip::get_image_as_pbarray() {
         }
     }
     return ret;
+}
+
+/*
+ * Set image in clipboard from PoolByteArray and returns true if successful.
+ * Returns false if width or height is zero.
+ */
+bool GDClip::set_image_from_pbarray(PoolByteArray rgba8_image, uint64_t width, uint64_t height) {
+    if (width && height) {
+        uint32_t *data = new uint32_t(width*height);
+        clip::image_spec spec = {
+            .width = width,
+            .height = height,
+            .bits_per_pixel = 32,
+            .bytes_per_row = width*4,
+            .red_mask = 0xff,
+            .green_mask = 0xff00,
+            .blue_mask = 0xff0000,
+            .alpha_mask = 0xff000000,
+            .red_shift = 0,
+            .green_shift = 8,
+            .blue_shift = 16,
+            .alpha_shift = 24
+        };
+        for (unsigned long pixel = 0; pixel < width*height; ++pixel) {
+            data[pixel] =   (rgba8_image[pixel*4 + 0] & 0xff);       // R
+            data[pixel] |=  (rgba8_image[pixel*4 + 1] & 0xff) << 8;  // G
+            data[pixel] |=  (rgba8_image[pixel*4 + 2] & 0xff) << 16; // B
+            data[pixel] |=  (rgba8_image[pixel*4 + 3] & 0xff) << 24; // A
+        }
+        clip::image img(data, spec);
+        return clip::set_image(img);
+    }
+    return false;
 }
