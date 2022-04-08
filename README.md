@@ -8,14 +8,14 @@ Tested on Godot Engine v3.4.3 (Windows + Linux/X11 + macOS)
 library with image support. This demo leverages this library to enable
 image-paste functionality in Godot.
 
-# Additional Dependencies
+## Dependencies
 
 - Common: `make`, `scons`, `git`
 - Linux: `gcc`, `libx11-dev`/`libx11-devel`, `libpng-dev`/`libpng-devel`
 - macOS: Command Line Tools for Xcode
 - Windows: `MSYS2`, `mingw-w64-cross-gcc`
 
-# Building and Running Demo
+## Building and Running Demo
 
 0. Install required dependencies for your platform.
 
@@ -43,7 +43,7 @@ make PLATFORM=<linux|osx|windows> build
 If successful, you should see the image pasted in the center of the demo
 window.
 
-# GDClip Usage
+## GDClip Usage
 
 TODO
 
@@ -51,7 +51,7 @@ See src/gdclip.h for available functions.
 
 See demo/Main.gd for example usage.
 
-# Cross-Compile for Windows on Linux/macOS
+## Cross-Compile for Windows on Linux/macOS
 
 Status: Builds with MinGW-w64 cross-compiler and works in Wine/Windows.
 
@@ -70,7 +70,7 @@ brew install mingw-w64
 
 4. Test build with wine and enjoy :)
 
-# Cross-Compile for (x86_64) macOS/OSX on Linux
+## Cross-Compile for (x86_64) macOS/OSX on Linux
 
 Status: Builds in Darling environment and works in macOS.
 
@@ -100,6 +100,6 @@ Darling [.]$ /usr/bin/installer -pkg Command\ Line\ Tools.pkg -target /
 
 7. Run in real OSX environment and enjoy :)
 
-# License
+## License
 - [clip](https://github.com/dacap/clip): MIT
 - [godot-cpp](https://github.com/godotengine/godot-cpp): MIT
