@@ -23,6 +23,8 @@ public:
 
     void _init();
 
+    bool clear();
+
     String get_text();
 
     bool has_image();

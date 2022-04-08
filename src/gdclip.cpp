@@ -9,6 +9,7 @@
 using namespace godot;
 
 void GDClip::_register_methods() {
+    register_method("clear", &GDClip::clear);
     register_method("get_text", &GDClip::get_text);
     register_method("has_image", &GDClip::has_image);
     register_method("get_image_size", &GDClip::get_image_size);
@@ -23,6 +24,13 @@ GDClip::~GDClip() {
 
 void GDClip::_init() {
     return;
+}
+
+/*
+ * Clear clipboard contents and returns true if successful.
+ */
+bool GDClip::clear() {
+    return clip::clear();
 }
 
 /*
