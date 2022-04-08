@@ -21,7 +21,7 @@ clip/*:
 godot-cpp/*:
 	git submodule update --init --recursive godot-cpp
 godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a:
-	cd godot-cpp && CC=${MINGW64_PREFIX}gcc CXX=${MINGW64_PREFIX}g++ scons platform=windows target=${TARGET} generate_bindings=yes -j${NPROC}
+	cd godot-cpp && scons use_mingw=yes platform=windows target=${TARGET} generate_bindings=yes -j${NPROC}
 godot-cpp/bin/libgodot-cpp.linux.${TARGET}.64.a:
 	cd godot-cpp && scons platform=linux target=${TARGET} generate_bindings=yes -j${NPROC}
 godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a:
