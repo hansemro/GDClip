@@ -45,7 +45,7 @@ bin/libgdclip.so: src/gdclip.linux.o src/gdlibrary.linux.o clip/clip.linux.o cli
 build_windows: godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a bin/libgdclip.dll
 clip/%.windows.o: clip/%.cpp
 	${MINGW64_PREFIX}g++ $(CLIP_CXXFLAGS) -o $@ -c $^
-src/%.windows.obj: src/%.cpp
+src/%.windows.o: src/%.cpp
 	${MINGW64_PREFIX}g++ $(CXXFLAGS) -o $@ -c $^
 bin/libgdclip.dll: src/gdclip.windows.o src/gdlibrary.windows.o clip/clip.windows.o clip/clip_win.windows.o clip/image.windows.o
 	mkdir -p bin
