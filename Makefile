@@ -28,7 +28,7 @@ godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a:
 	cd godot-cpp && scons macos_arch=x86_64 platform=osx target=${TARGET} generate_bindings=yes -j${NPROC}
 prep: clip/* godot-cpp/*
 
-.PHONY: build build_linux build_windows
+.PHONY: build build_linux build_windows build_osx
 build: prep build_${PLATFORM}
 
 build_linux: godot-cpp/bin/libgodot-cpp.linux.${TARGET}.64.a bin/libgdclip.so
@@ -66,12 +66,6 @@ bin/libgdclip.dylib: src/gdclip.osx.o src/gdlibrary.osx.o clip/clip.osx.o clip/c
 	mkdir -p demo/bin/osx
 	cp $@ demo/bin/osx/
 
-.PHONY: clean
-clean:
-	-rm demo/bin/*/*
-	-rm clip/*.o*
-	-rm src/*.o*
-	-rm godot-cpp/bin/*
 .PHONY: clean
 clean:
 	-rm demo/bin/*/*
