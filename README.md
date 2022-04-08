@@ -25,7 +25,7 @@ pacman -S mingw-w64-cross-gcc scons make git
 # macOS w/ Command Line Tools for Xcode
 pip3 install scons
 # Arch Linux
-sudo pacman -S gcc libx11 libpng git make
+sudo pacman -S gcc libx11 libpng git make scons
 ```
 
 1. Clone repo and build for your platform:
