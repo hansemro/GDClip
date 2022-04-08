@@ -27,7 +27,7 @@ public:
 
     bool has_image();
 
-    Vector2 get_image_size();
+    PoolIntArray get_image_size();
 
     PoolByteArray get_image_as_pbarray();
 };

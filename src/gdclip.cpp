@@ -46,15 +46,20 @@ bool GDClip::has_image() {
 }
 
 /*
- * Returns Vector2(width, height) of image in the clipboard. If there is no
- * image in the clipboard, then this function returns Vector2(0, 0).
+ * Returns PoolIntArray([width, height]) of image in the clipboard. If there is no
+ * image in the clipboard, then this function returns PoolIntArray([0, 0]).
  */
-Vector2 GDClip::get_image_size() {
+PoolIntArray GDClip::get_image_size() {
+    PoolIntArray size = PoolIntArray();
     clip::image img;
     if (GDClip::has_image() && clip::get_image(img)) {
-        return Vector2(img.spec().width, img.spec().height);
+        size.append(img.spec().width);
+        size.append(img.spec().height);
+    } else {
+        size.append(0);
+        size.append(0);
     }
-    return Vector2(0, 0);
+    return size;
 }
 
 /*
