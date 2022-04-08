@@ -41,6 +41,22 @@ func _ready():
 	print("test_has_image_2 Passed")
 	test_has_image_3()
 	print("test_has_image_3 Passed")
+	test_get_image_size_1()
+	print("test_get_image_size_1 Passed")
+	test_get_image_size_2()
+	print("test_get_image_size_2 Passed")
+	test_get_image_size_3()
+	print("test_get_image_size_3 Passed")
+	test_get_image_as_pbarray_1()
+	print("test_get_image_as_pbarray_1 Passed")
+	test_get_image_as_pbarray_2()
+	print("test_get_image_as_pbarray_2 Passed")
+	test_get_image_as_pbarray_3()
+	print("test_get_image_as_pbarray_3 Passed")
+	test_set_image_from_pbarray_1()
+	print("test_set_image_as_pbarray_1 Passed")
+	test_set_image_from_pbarray_2()
+	print("test_set_image_as_pbarray_2 Passed")
 
 # TEST functions
 
@@ -119,3 +135,77 @@ func test_has_image_3():
 	assert(gdclip.set_image_from_pbarray(black_pixel, 1, 1))
 	assert(gdclip.has_image())
 	assert(gdclip.get_text() == "")
+
+# Return [0, 0] array if there is no image in clipboard
+func test_get_image_size_1():
+	assert(gdclip)
+	assert(gdclip.clear())
+	assert(gdclip.get_image_size()[0] == 0)
+	assert(gdclip.get_image_size()[1] == 0)
+
+# Return correct sizes for various sample images in clipboard
+func test_get_image_size_2():
+	var one_by_one = [255, 255, 255, 0]
+	var two_by_three = [255, 255, 255, 0, 255, 255, 255, 0,
+						255, 255, 255, 0, 255, 255, 255, 0,
+						255, 255, 255, 0, 255, 255, 255, 0]
+	assert(gdclip)
+	assert(gdclip.set_image_from_pbarray(one_by_one, 1, 1))
+	assert(gdclip.get_image_size()[0] == 1)
+	assert(gdclip.get_image_size()[1] == 1)
+	assert(gdclip.set_image_from_pbarray(two_by_three, 2, 3))
+	assert(gdclip.get_image_size()[0] == 2)
+	assert(gdclip.get_image_size()[1] == 3)
+
+# Return [0, 0] array if text has been set
+func test_get_image_size_3():
+	assert(gdclip)
+	assert(gdclip.set_text("test_get_image_size_3"))
+	assert(gdclip.get_image_size()[0] == 0)
+	assert(gdclip.get_image_size()[1] == 0)
+
+# Return empty array if clipboard is empty
+func test_get_image_as_pbarray_1():
+	assert(gdclip)
+	assert(gdclip.clear())
+	assert(gdclip.get_image_as_pbarray().empty())
+
+# Return empty array if text is set
+func test_get_image_as_pbarray_2():
+	assert(gdclip)
+	assert(gdclip.set_text("test_get_image_as_pbarray_2"))
+	assert(gdclip.get_image_as_pbarray().empty())
+
+# Set pbarray images and compare with pbarray images from clipboard
+func test_get_image_as_pbarray_3():
+	var one_by_one = [123, 239, 4, 0]
+	var two_by_three = [11, 22, 33, 0, 44, 55, 66, 0,
+						77, 88, 99, 0, 111, 122, 133, 0,
+						144, 155, 166, 0, 177, 188, 199, 0]
+	assert(gdclip)
+	assert(gdclip.set_image_from_pbarray(one_by_one, 1, 1))
+	var image_byte_array = gdclip.get_image_as_pbarray()
+	for i in range(0, 4):
+		assert(image_byte_array[i] == one_by_one[i])
+	assert(gdclip.set_image_from_pbarray(two_by_three, 2, 3))
+	image_byte_array = gdclip.get_image_as_pbarray()
+	for i in range(0, 6*4):
+		assert(image_byte_array[i] == two_by_three[i])
+
+# Return false if image width or height is zero
+func test_set_image_from_pbarray_1():
+	assert(gdclip)
+	assert(!gdclip.set_image_from_pbarray([], 0, 0))
+	assert(!gdclip.set_image_from_pbarray([], 0, 2))
+	assert(!gdclip.set_image_from_pbarray([], 2, 0))
+
+# Return false if PoolByteArray size is greater than width*height*4
+func test_set_image_from_pbarray_2():
+	var two_by_three = [11, 22, 33, 0, 44, 55, 66, 0,
+						77, 88, 99, 0, 111, 122, 133, 0,
+						144, 155, 166, 0, 177, 188, 199, 0]
+	assert(gdclip)
+	assert(!gdclip.set_image_from_pbarray(two_by_three, 3, 3))
+	assert(!gdclip.set_image_from_pbarray(two_by_three, 2, 4))
+	assert(gdclip.set_image_from_pbarray(two_by_three, 1, 3))
+	assert(gdclip.set_image_from_pbarray(two_by_three, 2, 2))
