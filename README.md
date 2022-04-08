@@ -43,6 +43,23 @@ See src/gdclip.h for available functions.
 
 See demo/Main.gd for example usage.
 
+# Cross-Compile for Windows on Linux
+
+Status: Builds with MinGW cross-compiler and works with Wine.
+
+1. Install mingw-w64.
+
+```
+# Arch Linux
+sudo pacman -S mingw-w64-gcc
+```
+
+2. Run `make PLATFORM=windows build`
+
+3. Open demo in Godot and export Windows build.
+
+4. Test build with wine and enjoy :)
+
 # License
 - [clip](https://github.com/dacap/clip): MIT
 - [godot-cpp](https://github.com/godotengine/godot-cpp): MIT
