@@ -37,9 +37,9 @@ clip/%.linux.o: clip/%.cpp
 src/%.linux.o: src/%.cpp
 	g++ $(CXXFLAGS) -o $@ -c $<
 bin/libgdclip.so: src/gdclip.linux.o src/gdlibrary.linux.o clip/clip.linux.o clip/clip_x11.linux.o clip/image.linux.o
-	mkdir -p bin
+	test -d bin || mkdir -p bin
 	g++ $(CXXFLAGS) -shared -o $@ $^ ${LINUX_LIBFLAGS}
-	mkdir -p demo/bin/x11
+	test -d demo/bin/x11 || mkdir -p demo/bin/x11
 	cp $@ demo/bin/x11/
 
 build_windows: godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a bin/libgdclip.dll
@@ -48,9 +48,9 @@ clip/%.windows.o: clip/%.cpp
 src/%.windows.o: src/%.cpp
 	${MINGW64_PREFIX}g++ $(CXXFLAGS) -o $@ -c $^
 bin/libgdclip.dll: src/gdclip.windows.o src/gdlibrary.windows.o clip/clip.windows.o clip/clip_win.windows.o clip/image.windows.o
-	mkdir -p bin
+	test -d bin || mkdir -p bin
 	${MINGW64_PREFIX}g++ $(CXXFLAGS) -shared -o $@ $^ ${WIN64_LIBFLAGS}
-	mkdir -p demo/bin/win64
+	test -d demo/bin/win64 || mkdir -p demo/bin/win64
 	cp $@ demo/bin/win64/
 
 build_osx: godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a bin/libgdclip.dylib
@@ -61,9 +61,9 @@ clip/%.osx.o: clip/%.mm
 src/%.osx.o: src/%.cpp
 	g++ $(CXXFLAGS) -o $@ -c $<
 bin/libgdclip.dylib: src/gdclip.osx.o src/gdlibrary.osx.o clip/clip.osx.o clip/clip_osx.osx.o clip/image.osx.o
-	mkdir -p bin
+	test -d bin || mkdir -p bin
 	g++ $(CXXFLAGS) -shared -o $@ $^ ${OSX_LIBFLAGS}
-	mkdir -p demo/bin/osx
+	test -d demo/bin/osx || mkdir -p demo/bin/osx
 	cp $@ demo/bin/osx/
 
 .PHONY: clean
