@@ -106,7 +106,7 @@ PoolByteArray GDClip::get_image_as_pbarray() {
  * Set image in clipboard from PoolByteArray and returns true if successful.
  * Returns false if width or height is zero.
  */
-bool GDClip::set_image_from_pbarray(PoolByteArray rgba8_image, uint64_t width, uint64_t height) {
+bool GDClip::set_image_from_pbarray(PoolByteArray rgba8_image, uint32_t width, uint32_t height) {
     if (width && height) {
         uint32_t *data = new uint32_t(width*height);
         clip::image_spec spec = {

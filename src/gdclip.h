@@ -35,7 +35,7 @@ public:
 
     PoolByteArray get_image_as_pbarray();
 
-    bool set_image_from_pbarray(PoolByteArray rgba8_image, uint64_t width, uint64_t height);
+    bool set_image_from_pbarray(PoolByteArray rgba8_image, uint32_t width, uint32_t height);
 };
 
 }
