@@ -97,7 +97,7 @@ func test_get_text_2():
 func test_get_text_3():
 	var orange_pixel = [255, 110, 18, 0]
 	assert(gdclip)
-	assert(gdclip.set_image_from_pbarray(orange_pixel))
+	assert(gdclip.set_image_from_pbarray(orange_pixel, 1, 1))
 	assert(gdclip.get_text() == "")
 
 # return false after setting text
@@ -116,6 +116,6 @@ func test_has_image_2():
 func test_has_image_3():
 	var black_pixel = [0, 0, 0, 0]
 	assert(gdclip)
-	assert(gdclip.set_image_from_pbarray(black_pixel))
+	assert(gdclip.set_image_from_pbarray(black_pixel, 1, 1))
 	assert(gdclip.has_image())
 	assert(gdclip.get_text() == "")
