@@ -19,6 +19,28 @@ func _ready():
 		test_sprite.set_texture(texture)
 		test_sprite.position = get_viewport().get_visible_rect().size/2
 		add_child(test_sprite)
+	test_gdclip_not_null()
+	print("test_gdclip_not_null Passed")
+	test_clear_1()
+	print("test_clear_1 Passed")
+	test_clear_2()
+	print("test_clear_2 Passed")
+	test_set_text_1()
+	print("test_set_text_1 Passed")
+	test_set_text_2()
+	print("test_set_text_2 Passed")
+	test_get_text_1()
+	print("test_get_text_1 Passed")
+	test_get_text_2()
+	print("test_get_text_2 Passed")
+	test_get_text_3()
+	print("test_get_text_3 Passed")
+	test_has_image_1()
+	print("test_has_image_1 Passed")
+	test_has_image_2()
+	print("test_has_image_2 Passed")
+	test_has_image_3()
+	print("test_has_image_3 Passed")
 
 # TEST functions
 
