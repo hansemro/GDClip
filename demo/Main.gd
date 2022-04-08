@@ -199,7 +199,7 @@ func test_set_image_from_pbarray_1():
 	assert(!gdclip.set_image_from_pbarray([], 0, 2))
 	assert(!gdclip.set_image_from_pbarray([], 2, 0))
 
-# Return false if PoolByteArray size is greater than width*height*4
+# Return false if PoolByteArray size is less than width*height*4
 func test_set_image_from_pbarray_2():
 	var two_by_three = [11, 22, 33, 0, 44, 55, 66, 0,
 						77, 88, 99, 0, 111, 122, 133, 0,
