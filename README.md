@@ -54,11 +54,39 @@ Status: Builds with MinGW cross-compiler and works with Wine.
 sudo pacman -S mingw-w64-gcc
 ```
 
-2. Run `make PLATFORM=windows build`
+2. Run `make PLATFORM=windows build`.
 
 3. Open demo in Godot and export Windows build.
 
 4. Test build with wine and enjoy :)
+
+# Cross-Compile for (x86_64) macOS/OSX on Linux
+
+Status: Builds in Darling environment but untested.
+
+1. Install darling.
+
+```
+# Arch Linux
+yay -S darling-git
+```
+
+2. Download Command Line Tools for Xcode (12.4) from Apple Developer portal.
+
+3. Install Command Line Tools in darling shell.
+
+```
+$ darling shell
+Darling [.]$ hdiutil attach /path/to/Command_Line_tools_for_Xcode_12.4.dmg
+Darling [.]$ cd /Volumes/Command_Line_Tools_for_Xcode_12.4/
+Darling [.]$ /usr/bin/installer -pkg Command\ Line\ Tools.pkg -target /
+```
+
+4. Build library with `make PLATFORM=osx`.
+
+5. Open demo in Godot and export OSX build.
+
+6. Run in real OSX environment and enjoy :)
 
 # License
 - [clip](https://github.com/dacap/clip): MIT
