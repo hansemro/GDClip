@@ -45,7 +45,7 @@ See demo/Main.gd for example usage.
 
 # Cross-Compile for Windows on Linux
 
-Status: Builds with MinGW cross-compiler and works with Wine.
+Status: Builds with MinGW-w64 cross-compiler and works with Wine.
 
 1. Install mingw-w64.
 
@@ -82,7 +82,7 @@ Darling [.]$ cd /Volumes/Command_Line_Tools_for_Xcode_12.4/
 Darling [.]$ /usr/bin/installer -pkg Command\ Line\ Tools.pkg -target /
 ```
 
-4. Build library with `make PLATFORM=osx`.
+4. Build library with `make PLATFORM=osx` in darling shell.
 
 5. Open demo in Godot and export OSX build.
 
