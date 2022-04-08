@@ -68,10 +68,10 @@ bool GDClip::has_image() {
  */
 PoolIntArray GDClip::get_image_size() {
     PoolIntArray size = PoolIntArray();
-    clip::image img;
-    if (GDClip::has_image() && clip::get_image(img)) {
-        size.append(img.spec().width);
-        size.append(img.spec().height);
+    clip::image_spec spec;
+    if (GDClip::has_image() && clip::get_image_spec(spec)) {
+        size.append(spec.width);
+        size.append(spec.height);
     } else {
         size.append(0);
         size.append(0);
@@ -83,7 +83,7 @@ PoolIntArray GDClip::get_image_size() {
  * Returns PoolByteArray containing image from clipboard. If there is no image
  * in the clipboard, then this function returns an empty PoolByteArray object.
  *
- * Note: clip::get_image returns an image in RGBA8888 format regardless of
+ * Note: clip::get_image retrieves an image in RGBA8888 format regardless of
  * image's original format (!?)
  */
 PoolByteArray GDClip::get_image_as_pbarray() {
