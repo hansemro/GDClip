@@ -2,17 +2,18 @@
 
 Language: GDNative (C++)
 
-Tested on Godot Engine v3.4.3 (Linux/X11)
+Tested on Godot Engine v3.4.3 (Windows + Linux/X11)
 
-`clip` is a cross-platform copy/paste clipboard library with image support. This
-demo leverages this library to enable image-paste functionality in Godot.
+`clip` is a cross-platform (Windows/macOS/X11-Linux) copy/paste clipboard
+library with image support. This demo leverages this library to enable
+image-paste functionality in Godot.
 
 # Additional Dependencies
 
-- Common: `make`
-- Linux: `libx11-dev`/`libx11-devel`, `libpng-dev`/`libpng-devel`
-- macOS: TODO
-- Windows: TODO
+- Common: `make`, `scons`, `git`
+- Linux: `gcc`, `libx11-dev`/`libx11-devel`, `libpng-dev`/`libpng-devel`
+- macOS: Command Line Tools for Xcode
+- Windows: `MSYS2`, `mingw-w64-cross-gcc`
 
 # Building and Running Demo
 
@@ -82,11 +83,13 @@ Darling [.]$ cd /Volumes/Command_Line_Tools_for_Xcode_12.4/
 Darling [.]$ /usr/bin/installer -pkg Command\ Line\ Tools.pkg -target /
 ```
 
-4. Build library with `make PLATFORM=osx` in darling shell.
+4. Install [brew](https://brew.sh/) and dependencies in Darling environment.
 
-5. Open demo in Godot and export OSX build.
+5. Build library with `make PLATFORM=osx build` in darling shell.
 
-6. Run in real OSX environment and enjoy :)
+6. Open demo in Godot and export OSX build.
+
+7. Run in real OSX environment and enjoy :)
 
 # License
 - [clip](https://github.com/dacap/clip): MIT
