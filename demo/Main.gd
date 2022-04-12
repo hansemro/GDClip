@@ -111,7 +111,7 @@ func test_get_text_2():
 
 # return empty string after setting image
 func test_get_text_3():
-	var orange_pixel = [255, 110, 18, 0]
+	var orange_pixel = [255, 110, 18, 255]
 	assert(gdclip)
 	assert(gdclip.set_image_from_pbarray(orange_pixel, 1, 1))
 	assert(gdclip.get_text() == "")
@@ -130,7 +130,7 @@ func test_has_image_2():
 
 # return true after setting image
 func test_has_image_3():
-	var black_pixel = [0, 0, 0, 0]
+	var black_pixel = [0, 0, 0, 255]
 	assert(gdclip)
 	assert(gdclip.set_image_from_pbarray(black_pixel, 1, 1))
 	assert(gdclip.has_image())
@@ -145,10 +145,10 @@ func test_get_image_size_1():
 
 # Return correct sizes for various sample images in clipboard
 func test_get_image_size_2():
-	var one_by_one = [255, 255, 255, 0]
-	var two_by_three = [255, 255, 255, 0, 255, 255, 255, 0,
-						255, 255, 255, 0, 255, 255, 255, 0,
-						255, 255, 255, 0, 255, 255, 255, 0]
+	var one_by_one = [255, 255, 255, 255]
+	var two_by_three = [255, 255, 255, 255, 255, 255, 255, 255,
+						255, 255, 255, 255, 255, 255, 255, 255,
+						255, 255, 255, 255, 255, 255, 255, 255]
 	assert(gdclip)
 	assert(gdclip.set_image_from_pbarray(one_by_one, 1, 1))
 	assert(gdclip.get_image_size()[0] == 1)
@@ -178,10 +178,10 @@ func test_get_image_as_pbarray_2():
 
 # Set pbarray images and compare with pbarray images from clipboard
 func test_get_image_as_pbarray_3():
-	var one_by_one = [123, 239, 4, 0]
-	var two_by_three = [11, 22, 33, 0, 44, 55, 66, 0,
-						77, 88, 99, 0, 111, 122, 133, 0,
-						144, 155, 166, 0, 177, 188, 199, 0]
+	var one_by_one = [123, 239, 4, 255]
+	var two_by_three = [11, 22, 33, 255, 44, 55, 66, 155,
+						77, 88, 99, 255, 111, 122, 133, 123,
+						144, 155, 166, 255, 177, 188, 199, 100]
 	assert(gdclip)
 	assert(gdclip.set_image_from_pbarray(one_by_one, 1, 1))
 	var image_byte_array = gdclip.get_image_as_pbarray()
@@ -198,13 +198,13 @@ func test_set_image_from_pbarray_1():
 	assert(!gdclip.set_image_from_pbarray([], 0, 0))
 	assert(!gdclip.set_image_from_pbarray([], 0, 2))
 	assert(!gdclip.set_image_from_pbarray([], 2, 0))
-	assert(!gdclip.set_image_from_pbarray([255, 255, 255, 0], 0, 0))
+	assert(!gdclip.set_image_from_pbarray([255, 255, 255, 255], 0, 0))
 
 # Return false if PoolByteArray size is less than width*height*4
 func test_set_image_from_pbarray_2():
-	var two_by_three = [11, 22, 33, 0, 44, 55, 66, 0,
-						77, 88, 99, 0, 111, 122, 133, 0,
-						144, 155, 166, 0, 177, 188, 199, 0]
+	var two_by_three = [11, 22, 33, 44, 55, 66, 77, 88,
+						99, 111, 122, 133, 144, 155, 166, 177,
+						188, 199, 211, 222, 233, 244, 255, 244]
 	assert(gdclip)
 	assert(!gdclip.set_image_from_pbarray(two_by_three, 3, 3))
 	assert(!gdclip.set_image_from_pbarray(two_by_three, 2, 4))
