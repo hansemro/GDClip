@@ -60,6 +60,16 @@ func _ready():
 
 # TEST functions
 
+func gen_random_colors(num_colors: int) -> PoolByteArray:
+	var ret = []
+	if num_colors > 0:
+		for _i in range(0, num_colors):
+			ret.append(randi() % 256)
+			ret.append(randi() % 256)
+			ret.append(randi() % 256)
+			ret.append(randi() % 256)
+	return ret
+
 # checks if gdclip library was loaded successfully
 func test_gdclip_not_null():
 	assert(gdclip)
@@ -145,10 +155,8 @@ func test_get_image_size_1():
 
 # Return correct sizes for various sample images in clipboard
 func test_get_image_size_2():
-	var one_by_one = [255, 255, 255, 255]
-	var two_by_three = [255, 255, 255, 255, 255, 255, 255, 255,
-						255, 255, 255, 255, 255, 255, 255, 255,
-						255, 255, 255, 255, 255, 255, 255, 255]
+	var one_by_one = gen_random_colors(1)
+	var two_by_three = gen_random_colors(6)
 	assert(gdclip)
 	assert(gdclip.set_image_from_pbarray(one_by_one, 1, 1))
 	assert(gdclip.get_image_size()[0] == 1)
@@ -178,10 +186,8 @@ func test_get_image_as_pbarray_2():
 
 # Set pbarray images and compare with pbarray images from clipboard
 func test_get_image_as_pbarray_3():
-	var one_by_one = [123, 239, 4, 255]
-	var two_by_three = [11, 22, 33, 255, 44, 55, 66, 155,
-						77, 88, 99, 255, 111, 122, 133, 123,
-						144, 155, 166, 255, 177, 188, 199, 100]
+	var one_by_one = gen_random_colors(1)
+	var two_by_three = gen_random_colors(6)
 	assert(gdclip)
 	assert(gdclip.set_image_from_pbarray(one_by_one, 1, 1))
 	var image_byte_array = gdclip.get_image_as_pbarray()
@@ -202,9 +208,7 @@ func test_set_image_from_pbarray_1():
 
 # Return false if PoolByteArray size is less than width*height*4
 func test_set_image_from_pbarray_2():
-	var two_by_three = [11, 22, 33, 44, 55, 66, 77, 88,
-						99, 111, 122, 133, 144, 155, 166, 177,
-						188, 199, 211, 222, 233, 244, 255, 244]
+	var two_by_three = gen_random_colors(6)
 	assert(gdclip)
 	assert(!gdclip.set_image_from_pbarray(two_by_three, 3, 3))
 	assert(!gdclip.set_image_from_pbarray(two_by_three, 2, 4))
