@@ -15,10 +15,10 @@ OSX_LIBFLAGS = ${LIBS} -lgodot-cpp.osx.${TARGET}.x86_64 -Wl,-framework,Cocoa
 .PHONY: all
 all: build
 
-.PHONY: prep
-clip/*:
+.PHONY: clip godot-cpp prep
+clip:
 	git submodule update --init clip
-godot-cpp/*:
+godot-cpp:
 	git submodule update --init --recursive godot-cpp
 godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a:
 	cd godot-cpp && scons use_mingw=yes platform=windows target=${TARGET} generate_bindings=yes -j${NPROC}
@@ -26,13 +26,13 @@ godot-cpp/bin/libgodot-cpp.linux.${TARGET}.64.a:
 	cd godot-cpp && scons platform=linux target=${TARGET} generate_bindings=yes -j${NPROC}
 godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a:
 	cd godot-cpp && scons macos_arch=x86_64 platform=osx target=${TARGET} generate_bindings=yes -j${NPROC}
-prep: clip/* godot-cpp/*
+prep: clip godot-cpp
 
 .PHONY: build build_linux build_windows build_osx
 build: prep build_${PLATFORM}
 
 build_linux: godot-cpp/bin/libgodot-cpp.linux.${TARGET}.64.a bin/libgdclip.so
-clip/%.linux.o: clip/%.cpp
+%.linux.o: %.cpp
 	g++ $(CLIP_CXXFLAGS) -DHAVE_PNG_H -o $@ -c $^
 src/%.linux.o: src/%.cpp
 	g++ $(CXXFLAGS) -o $@ -c $<
@@ -43,7 +43,7 @@ bin/libgdclip.so: src/gdclip.linux.o src/gdlibrary.linux.o clip/clip.linux.o cli
 	cp $@ demo/bin/x11/
 
 build_windows: godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a bin/libgdclip.dll
-clip/%.windows.o: clip/%.cpp
+%.windows.o: %.cpp
 	${MINGW64_PREFIX}g++ $(CLIP_CXXFLAGS) -o $@ -c $^
 src/%.windows.o: src/%.cpp
 	${MINGW64_PREFIX}g++ $(CXXFLAGS) -o $@ -c $^
@@ -54,7 +54,7 @@ bin/libgdclip.dll: src/gdclip.windows.o src/gdlibrary.windows.o clip/clip.window
 	cp $@ demo/bin/win64/
 
 build_osx: godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a bin/libgdclip.dylib
-clip/%.osx.o: clip/%.cpp
+%.osx.o: %.cpp
 	g++ $(CLIP_CXXFLAGS) -o $@ -c $^
 clip/%.osx.o: clip/%.mm
 	g++ $(CLIP_CXXFLAGS) -o $@ -c $^
