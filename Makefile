@@ -55,11 +55,9 @@ bin/libgdclip.dll: src/gdclip.windows.o src/gdlibrary.windows.o clip/clip.window
 
 build_osx: godot-cpp/bin/libgodot-cpp.osx.${TARGET}.x86_64.a bin/libgdclip.dylib
 %.osx.o: %.cpp
-	g++ $(CLIP_CXXFLAGS) -o $@ -c $^
-clip/%.osx.o: clip/%.mm
-	g++ $(CLIP_CXXFLAGS) -o $@ -c $^
-src/%.osx.o: src/%.cpp
-	g++ $(CXXFLAGS) -o $@ -c $<
+	g++ $(CXXFLAGS) -o $@ -c $^
+%.osx.o: %.mm
+	g++ $(CXXFLAGS) -o $@ -c $^
 bin/libgdclip.dylib: src/gdclip.osx.o src/gdlibrary.osx.o clip/clip.osx.o clip/clip_osx.osx.o clip/image.osx.o
 	test -d bin || mkdir -p bin
 	g++ $(CXXFLAGS) -shared -o $@ $^ ${OSX_LIBFLAGS}
