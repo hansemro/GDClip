@@ -72,6 +72,10 @@ String GDClip::get_text() {
  * Set text in clipboard and returns true if successful.
  */
 bool GDClip::set_text(String text) {
+#if defined(WINDOWS)
+    if (text.length() == 0)
+        return clip::clear();
+#endif
     return clip::set_text(text.utf8().get_data());
 }
 
