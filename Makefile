@@ -5,8 +5,8 @@ NPROC ?= 4
 TARGET ?= debug
 
 MINGW64_PREFIX=x86_64-w64-mingw32-
-CXXFLAGS = -std=c++14 -fPIC -I. -Igodot-cpp/ -Igodot-cpp/godot-headers -Igodot-cpp/include -Igodot-cpp/include/gen -Igodot-cpp/include/core -Iclip/
-CLIP_CXXFLAGS = -std=c++14 -fPIC -Iclip/
+CXXFLAGS = -O3 -std=c++14 -fPIC -I. -Igodot-cpp/ -Igodot-cpp/godot-headers -Igodot-cpp/include -Igodot-cpp/include/gen -Igodot-cpp/include/core -Iclip/
+CLIP_CXXFLAGS = -O3 -std=c++14 -fPIC -Iclip/
 LIBS = -Lgodot-cpp/bin
 WIN64_LIBFLAGS = ${LIBS} -lgodot-cpp.windows.${TARGET}.64 -lshlwapi -lwindowscodecs -lole32 -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
 LINUX_LIBFLAGS = ${LIBS} -lgodot-cpp.linux.${TARGET}.64 -lpng -lpthread -lxcb
