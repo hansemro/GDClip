@@ -38,6 +38,17 @@ void GDClip::_register_methods() {
     register_method("set_image_from_pbarray", &GDClip::set_image_from_pbarray);
 }
 
+static void _clip_error_handler(clip::ErrorCode code) {
+    switch (code) {
+    case clip::ErrorCode::CannotLock:
+        Godot::print("GDClip Error: clipboard access locked.");
+        break;
+    case clip::ErrorCode::ImageNotSupported:
+        Godot::print("GDClip Error: clipboard image format not supported");
+        break;
+    }
+}
+
 GDClip::GDClip() {
 }
 
@@ -45,6 +56,7 @@ GDClip::~GDClip() {
 }
 
 void GDClip::_init() {
+    clip::set_error_handler(_clip_error_handler);
     return;
 }
 
