@@ -6,6 +6,26 @@
 #include "gdclip.h"
 #include <string.h>
 
+#if defined(WINDOWS)
+#define RED_MASK 0xff0000
+#define GREEN_MASK 0xff00
+#define BLUE_MASK 0xff
+#define ALPHA_MASK 0xff000000
+#define RED_SHIFT 16
+#define GREEN_SHIFT 8
+#define BLUE_SHIFT 0
+#define ALPHA_SHIFT 24
+#else
+#define RED_MASK 0xff
+#define GREEN_MASK 0xff00
+#define BLUE_MASK 0xff0000
+#define ALPHA_MASK 0xff000000
+#define RED_SHIFT 0
+#define GREEN_SHIFT 8
+#define BLUE_SHIFT 16
+#define ALPHA_SHIFT 24
+#endif
+
 using namespace godot;
 
 void GDClip::_register_methods() {
@@ -82,20 +102,18 @@ PoolIntArray GDClip::get_image_size() {
 /*
  * Returns PoolByteArray containing image from clipboard. If there is no image
  * in the clipboard, then this function returns an empty PoolByteArray object.
- *
- * Note: clip::get_image retrieves an image in RGBA8888 format regardless of
- * image's original format (!?)
  */
 PoolByteArray GDClip::get_image_as_pbarray() {
     PoolByteArray ret = PoolByteArray();
     clip::image img;
     if (GDClip::has_image() && clip::get_image(img)) {
         for (unsigned long y = 0; y < img.spec().height; ++y) {
-            char* p = img.data() + img.spec().bytes_per_row * y;
-            for (unsigned long x = 0; x < img.spec().width; ++x) {
-                for (unsigned long byte = 0; byte < img.spec().bits_per_pixel/8; ++byte, ++p) {
-                    ret.append((*p) & 0xff);
-                }
+            uint32_t *p = (uint32_t *)(img.data() + img.spec().bytes_per_row * y);
+            for (unsigned long x = 0; x < img.spec().width; ++x, ++p) {
+                ret.append((*p & RED_MASK) >> RED_SHIFT);
+                ret.append((*p & GREEN_MASK) >> GREEN_SHIFT);
+                ret.append((*p & BLUE_MASK) >> BLUE_SHIFT);
+                ret.append((*p & ALPHA_MASK) >> ALPHA_SHIFT);
             }
         }
     }

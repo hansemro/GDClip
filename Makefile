@@ -46,7 +46,7 @@ build_windows: godot-cpp/bin/libgodot-cpp.windows.${TARGET}.64.a bin/libgdclip.d
 %.windows.o: %.cpp
 	${MINGW64_PREFIX}g++ $(CLIP_CXXFLAGS) -o $@ -c $^
 src/%.windows.o: src/%.cpp
-	${MINGW64_PREFIX}g++ $(CXXFLAGS) -o $@ -c $^
+	${MINGW64_PREFIX}g++ $(CXXFLAGS) -DWINDOWS -o $@ -c $^
 bin/libgdclip.dll: src/gdclip.windows.o src/gdlibrary.windows.o clip/clip.windows.o clip/clip_win.windows.o clip/image.windows.o
 	test -d bin || mkdir -p bin
 	${MINGW64_PREFIX}g++ $(CXXFLAGS) -shared -o $@ $^ ${WIN64_LIBFLAGS}
