@@ -35,7 +35,7 @@ build_linux: godot-cpp/bin/libgodot-cpp.linux.${TARGET}.64.a bin/libgdclip.so
 %.linux.o: %.cpp
 	g++ $(CLIP_CXXFLAGS) -DHAVE_PNG_H -o $@ -c $^
 src/%.linux.o: src/%.cpp
-	g++ $(CXXFLAGS) -o $@ -c $<
+	g++ $(CXXFLAGS) -DLINUX -o $@ -c $<
 bin/libgdclip.so: src/gdclip.linux.o src/gdlibrary.linux.o clip/clip.linux.o clip/clip_x11.linux.o clip/image.linux.o
 	test -d bin || mkdir -p bin
 	g++ $(CXXFLAGS) -shared -o $@ $^ ${LINUX_LIBFLAGS}

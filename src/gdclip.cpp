@@ -113,7 +113,12 @@ PoolByteArray GDClip::get_image_as_pbarray() {
     clip::image_spec spec;
     if (GDClip::has_image() && clip::get_image(img)) {
         spec = img.spec();
-        switch (spec.bits_per_pixel) {
+        uint8_t bpp = spec.bits_per_pixel;
+#if defined(LINUX)
+        if (!spec.alpha_mask && bpp == 32)
+            bpp = 24;
+#endif
+        switch (bpp) {
         case 32:
             for (unsigned long y = 0; y < spec.height; ++y) {
                 uint32_t *p = (uint32_t *)(img.data() + spec.bytes_per_row * y);
@@ -122,6 +127,17 @@ PoolByteArray GDClip::get_image_as_pbarray() {
                     ret.append((*p & spec.green_mask) >> spec.green_shift);
                     ret.append((*p & spec.blue_mask) >> spec.blue_shift);
                     ret.append((*p & spec.alpha_mask) >> spec.alpha_shift);
+                }
+            }
+            break;
+        case 24:
+            for (unsigned long y = 0; y < spec.height; ++y) {
+                uint32_t *p = (uint32_t *)(img.data() + spec.bytes_per_row * y);
+                for (unsigned long x = 0; x < spec.width; ++x, ++p) {
+                    ret.append((*p & spec.red_mask) >> spec.red_shift);
+                    ret.append((*p & spec.green_mask) >> spec.green_shift);
+                    ret.append((*p & spec.blue_mask) >> spec.blue_shift);
+                    ret.append(255);
                 }
             }
             break;
