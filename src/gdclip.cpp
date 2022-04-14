@@ -137,20 +137,20 @@ bool GDClip::set_image_from_pbarray(PoolByteArray rgba8_image, uint32_t width, u
             .height = height,
             .bits_per_pixel = 32,
             .bytes_per_row = width*4,
-            .red_mask = 0xff,
-            .green_mask = 0xff00,
-            .blue_mask = 0xff0000,
-            .alpha_mask = 0xff000000,
-            .red_shift = 0,
-            .green_shift = 8,
-            .blue_shift = 16,
-            .alpha_shift = 24
+            .red_mask = RED_MASK,
+            .green_mask = GREEN_MASK,
+            .blue_mask = BLUE_MASK,
+            .alpha_mask = ALPHA_MASK,
+            .red_shift = RED_SHIFT,
+            .green_shift = GREEN_SHIFT,
+            .blue_shift = BLUE_SHIFT,
+            .alpha_shift = ALPHA_SHIFT
         };
         for (unsigned long pixel = 0; pixel < width*height; ++pixel) {
-            data[pixel] =   (rgba8_image[pixel*4 + 0] & 0xff);       // R
-            data[pixel] |=  (rgba8_image[pixel*4 + 1] & 0xff) << 8;  // G
-            data[pixel] |=  (rgba8_image[pixel*4 + 2] & 0xff) << 16; // B
-            data[pixel] |=  (rgba8_image[pixel*4 + 3] & 0xff) << 24; // A
+            data[pixel] = (rgba8_image[pixel*4 + 0] << RED_SHIFT) |
+                          (rgba8_image[pixel*4 + 1] << GREEN_SHIFT) |
+                          (rgba8_image[pixel*4 + 2] << BLUE_SHIFT) |
+                          (rgba8_image[pixel*4 + 3] << ALPHA_SHIFT);
         }
         clip::image img(data, spec);
         return clip::set_image(img);
