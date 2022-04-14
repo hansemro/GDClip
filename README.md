@@ -4,9 +4,11 @@ Language: GDNative (C++)
 
 Tested on Godot Engine v3.4.3 (Windows + Linux/X11 + macOS)
 
-`clip` is a cross-platform (Windows/macOS/X11-Linux) copy/paste clipboard
-library with image support. This demo leverages this library to enable
-image-paste functionality in Godot.
+GDClip is a Windows/macOS/Linux copy/paste clipboard library wrapper of
+[clip](https://github.com/dacap/clip) for Godot programs.
+
+This repo also includes a small demo featuring paste functionality and
+unit tests.
 
 ## Dependencies
 
