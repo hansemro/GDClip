@@ -153,8 +153,9 @@ func test_has_image_3():
 func test_get_image_size_1():
 	assert(gdclip)
 	assert(gdclip.clear())
-	assert(gdclip.get_image_size()[0] == 0)
-	assert(gdclip.get_image_size()[1] == 0)
+	var size = gdclip.get_image_size()
+	assert(size[0] == 0)
+	assert(size[1] == 0)
 
 # Return correct sizes for various sample images in clipboard
 func test_get_image_size_2():
@@ -162,18 +163,21 @@ func test_get_image_size_2():
 	var two_by_three = gen_random_colors(6)
 	assert(gdclip)
 	assert(gdclip.set_image_from_pbarray(one_by_one, 1, 1))
-	assert(gdclip.get_image_size()[0] == 1)
-	assert(gdclip.get_image_size()[1] == 1)
+	var size = gdclip.get_image_size()
+	assert(size[0] == 1)
+	assert(size[1] == 1)
 	assert(gdclip.set_image_from_pbarray(two_by_three, 2, 3))
-	assert(gdclip.get_image_size()[0] == 2)
-	assert(gdclip.get_image_size()[1] == 3)
+	size = gdclip.get_image_size()
+	assert(size[0] == 2)
+	assert(size[1] == 3)
 
 # Return [0, 0] array if text has been set
 func test_get_image_size_3():
 	assert(gdclip)
 	assert(gdclip.set_text("test_get_image_size_3"))
-	assert(gdclip.get_image_size()[0] == 0)
-	assert(gdclip.get_image_size()[1] == 0)
+	var size = gdclip.get_image_size()
+	assert(size[0] == 0)
+	assert(size[1] == 0)
 
 # Return empty array if clipboard is empty
 func test_get_image_as_pbarray_1():
