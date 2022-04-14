@@ -110,15 +110,21 @@ PoolIntArray GDClip::get_image_size() {
 PoolByteArray GDClip::get_image_as_pbarray() {
     PoolByteArray ret = PoolByteArray();
     clip::image img;
+    clip::image_spec spec;
     if (GDClip::has_image() && clip::get_image(img)) {
-        for (unsigned long y = 0; y < img.spec().height; ++y) {
-            uint32_t *p = (uint32_t *)(img.data() + img.spec().bytes_per_row * y);
-            for (unsigned long x = 0; x < img.spec().width; ++x, ++p) {
-                ret.append((*p & RED_MASK) >> RED_SHIFT);
-                ret.append((*p & GREEN_MASK) >> GREEN_SHIFT);
-                ret.append((*p & BLUE_MASK) >> BLUE_SHIFT);
-                ret.append((*p & ALPHA_MASK) >> ALPHA_SHIFT);
+        spec = img.spec();
+        switch (spec.bits_per_pixel) {
+        case 32:
+            for (unsigned long y = 0; y < spec.height; ++y) {
+                uint32_t *p = (uint32_t *)(img.data() + spec.bytes_per_row * y);
+                for (unsigned long x = 0; x < spec.width; ++x, ++p) {
+                    ret.append((*p & spec.red_mask) >> spec.red_shift);
+                    ret.append((*p & spec.green_mask) >> spec.green_shift);
+                    ret.append((*p & spec.blue_mask) >> spec.blue_shift);
+                    ret.append((*p & spec.alpha_mask) >> spec.alpha_shift);
+                }
             }
+            break;
         }
     }
     return ret;
