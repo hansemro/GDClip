@@ -29,6 +29,7 @@
 using namespace godot;
 
 void GDClip::_register_methods() {
+    register_method("get_version", &GDClip::get_version);
     register_method("clear", &GDClip::clear);
     register_method("get_text", &GDClip::get_text);
     register_method("set_text", &GDClip::set_text);
@@ -46,6 +47,13 @@ GDClip::~GDClip() {
 
 void GDClip::_init() {
     return;
+}
+
+/*
+ * Returns GDClip library version as String.
+ */
+String GDClip::get_version() {
+    return String(version);
 }
 
 /*

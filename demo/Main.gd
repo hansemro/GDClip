@@ -4,6 +4,7 @@ onready var gdclip = preload("res://bin/gdclip.gdns").new()
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	print("GDClip Library version: %s" % gdclip.get_version())
 	print("Pasted text: %s" % gdclip.get_text())
 	print(gdclip.has_image())
 	if gdclip.has_image():

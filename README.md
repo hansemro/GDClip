@@ -1,5 +1,7 @@
 # GDClip: Clip + Godot
 
+Version: v0.1
+
 Language: GDNative (C++)
 
 Tested on Godot Engine v3.4.3 (Windows + Linux/X11 + macOS)

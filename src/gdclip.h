@@ -6,6 +6,8 @@
 #ifndef GDCLIP_H
 #define GDCLIP_H
 
+#define LIBGDCLIP_VERSION "v0.1"
+
 #include <Godot.hpp>
 #include <Node.hpp>
 #include "clip.h"
@@ -15,6 +17,9 @@ namespace godot {
 class GDClip : public Node {
     GODOT_CLASS(GDClip, Node)
 
+private:
+    const char* version = LIBGDCLIP_VERSION;
+
 public:
     static void _register_methods();
 
@@ -22,6 +27,8 @@ public:
     ~GDClip();
 
     void _init();
+
+    String get_version();
 
     bool clear();
 
