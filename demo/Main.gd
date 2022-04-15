@@ -2,16 +2,21 @@ extends Node
 
 onready var gdclip = preload("res://bin/gdclip.gdns").new()
 
+var _image_byte_array
+var _size
+var _restore = false
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	print("GDClip Library version: %s" % gdclip.get_version())
 	print("Pasted text: %s" % gdclip.get_text())
 	print(gdclip.has_image())
 	if gdclip.has_image():
-		var image_byte_array = gdclip.get_image_as_pbarray()
-		var size = gdclip.get_image_size()
-		print(size)
-		draw_pbarray(image_byte_array, size[0], size[1])
+		_restore = true
+		_image_byte_array = gdclip.get_image_as_pbarray()
+		_size = gdclip.get_image_size()
+		print(_size)
+		draw_pbarray(_image_byte_array, _size[0], _size[1])
 	test_gdclip_not_null()
 	print("test_gdclip_not_null Passed")
 	test_clear_1()
@@ -50,6 +55,11 @@ func _ready():
 	print("test_set_image_as_pbarray_1 Passed")
 	test_set_image_from_pbarray_2()
 	print("test_set_image_as_pbarray_2 Passed")
+	if _restore:
+		if gdclip.set_image_from_pbarray(_image_byte_array, _size[0], _size[1]):
+			print("Image copied back to clipboard")
+		else:
+			print("Failed to copy image")
 
 func draw_pbarray(pbarray: PoolByteArray, width: int, height: int):
 	var test_sprite = Sprite.new()
