@@ -161,7 +161,7 @@ PoolByteArray GDClip::get_image_as_pbarray() {
  */
 bool GDClip::set_image_from_pbarray(PoolByteArray rgba8_image, uint32_t width, uint32_t height) {
     if (width && height && rgba8_image.size() >= width*height*4) {
-        uint32_t *data = new uint32_t(width*height);
+        uint32_t *data = new uint32_t[width*height];
         clip::image_spec spec = {
             .width = width,
             .height = height,
