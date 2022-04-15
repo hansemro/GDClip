@@ -94,6 +94,22 @@ bool GDClip::has_image() {
     return clip::has(clip::image_format());
 }
 
+static void print_image_spec(clip::image_spec& spec) {
+    Godot::print("Image spec:");
+    Godot::print("  width: " + String::num_int64(spec.width));
+    Godot::print("  height: " + String::num_int64(spec.height));
+    Godot::print("  bits_per_pixel: " + String::num_int64(spec.bits_per_pixel));
+    Godot::print("  bytes_per_row: " + String::num_int64(spec.bytes_per_row));
+    Godot::print("  red_mask: " + String::num_int64(spec.red_mask));
+    Godot::print("  red_shift: " + String::num_int64(spec.red_shift));
+    Godot::print("  green_mask: " + String::num_int64(spec.green_mask));
+    Godot::print("  green_shift: " + String::num_int64(spec.green_shift));
+    Godot::print("  blue_mask: " + String::num_int64(spec.blue_mask));
+    Godot::print("  blue_shift: " + String::num_int64(spec.blue_shift));
+    Godot::print("  alpha_mask: " + String::num_int64(spec.alpha_mask));
+    Godot::print("  alpha_shift: " + String::num_int64(spec.alpha_shift));
+}
+
 /*
  * Returns PoolIntArray([width, height]) of image in the clipboard. If there is no
  * image in the clipboard, then this function returns PoolIntArray([0, 0]).
