@@ -55,7 +55,7 @@ window.
 String get_version()
 ```
 
-Returns GDClip library as Godot String.
+Returns GDClip library version as Godot String.
 
 ### clear
 
