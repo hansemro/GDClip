@@ -135,22 +135,7 @@ cd GDClip
 make PLATFORM=<linux|osx|windows> build
 ```
 
-2. Create gdclip.gdns file containing the following:
-
-```
-[gd_resource type="NativeScript" load_steps=2 format=2]
-
-[ext_resource path="res://GDClip/bin/gdclip.gdnlib" type="GDNativeLibrary" id=1]
-
-[resource]
-resource_name = "gdclip"
-class_name = "GDClip"
-library = ExtResource( 1 )
-```
-
-Update path if necessary.
-
-3. Create gdclip.gdnlib containing the following:
+2. Create gdclip.gdnlib (in `GDClip/bin/`) containing the following:
 
 ```
 [general]
@@ -175,6 +160,21 @@ OSX.64=[]
 
 Update library paths if necessary.
 
+3. Create gdclip.gdns file (in `GDClip/bin/`) containing the following:
+
+```
+[gd_resource type="NativeScript" load_steps=2 format=2]
+
+[ext_resource path="res://GDClip/bin/gdclip.gdnlib" type="GDNativeLibrary" id=1]
+
+[resource]
+resource_name = "gdclip"
+class_name = "GDClip"
+library = ExtResource( 1 )
+```
+
+Update path if necessary.
+
 4. Load `gdclip.gdns` as a resource in an appropriate GDScript file.
 
 ```
@@ -197,7 +197,7 @@ gdclip.clear()
 var pbarray = gdclip.get_image_as_pbarray()
 var size = gdclip.get_image_size()
 var image = Image.new()
-image.create_from_data(size[0], size[1], false, Image.FORMAT_RGB8, pbarray)
+image.create_from_data(size[0], size[1], false, Image.FORMAT_RGBA8, pbarray)
 var texture = ImageTexture.new()
 texture.create_from_image(image)
 var spr = Sprite.new()
