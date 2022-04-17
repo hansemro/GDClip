@@ -4,7 +4,7 @@ Version: v0.1
 
 Language: GDNative (C++)
 
-Tested on Godot Engine v3.4.3 (Windows + Linux/X11 + macOS)
+Tested on Godot Engine v3.4.x (Windows + Linux/X11 + macOS)
 
 GDClip is a Windows/macOS/Linux copy/paste clipboard library wrapper of
 [clip](https://github.com/dacap/clip) for Godot programs.
@@ -47,13 +47,164 @@ make PLATFORM=<linux|osx|windows> build
 If successful, you should see the image pasted in the center of the demo
 window.
 
-## GDClip Usage
+## GDClip API
 
-TODO
+### get_version
 
-See src/gdclip.h for available functions.
+```
+String get_version()
+```
 
-See demo/Main.gd for example usage.
+Returns GDClip library as Godot String.
+
+### clear
+
+```
+bool clear()
+```
+
+Clears clipboard content and returns true if successful.
+
+### get_text
+
+```
+String get_text()
+```
+
+Returns text content from clipboard as Godot String.
+
+If there is no text in the clipboard, then an empty String is returned.
+
+### set_text
+
+```
+bool set_text(String text)
+```
+
+Set text in clipboard and returns true if successful.
+
+If text is empty, then this function should return true.
+
+### has_image
+
+```
+bool has_image()
+```
+
+Returns true if clipboard contains an image and false otherwise.
+
+### get_image_size
+
+```
+PoolIntArray get_image_size()
+```
+
+Returns `[width, height]` of image in clipboard as PoolIntArray.
+
+If there is no image, then this function returns `[0, 0]`.
+
+### get_image_as_pbarray
+
+```
+PoolByteArray get_image_as_pbarray()
+```
+
+Returns PoolByteArray containing RGBA8888 values of the image in the clipboard.
+
+If there is no image in the clipboard, then this function returns an empty
+PoolByteArray.
+
+### set_image_from_pbarray
+
+```
+bool set_image_from_pbarray(PoolByteArray image, uint32_t width, uint32_t height)
+```
+
+Set image in clipboard from PoolByteArray and returns true if successful.
+
+Returns false if width or height is zero, or if PoolByteArray image size is
+less than `width*height*sizeof(uint32_t)`.
+
+## Usage in GDScript Project
+
+1. Clone repo inside Godot project and build library file(s) at `GDClip/bin`
+
+```
+git clone https://github.com/hansemro/GDClip
+cd GDClip
+make PLATFORM=<linux|osx|windows> build
+```
+
+2. Create gdclip.gdns file containing the following:
+
+```
+[gd_resource type="NativeScript" load_steps=2 format=2]
+
+[ext_resource path="res://GDClip/bin/gdclip.gdnlib" type="GDNativeLibrary" id=1]
+
+[resource]
+resource_name = "gdclip"
+class_name = "GDClip"
+library = ExtResource( 1 )
+```
+
+Update path if necessary.
+
+3. Create gdclip.gdnlib containing the following:
+
+```
+[general]
+
+singleton=false
+load_once=true
+symbol_prefix="godot_"
+reloadable=false
+
+[entry]
+
+X11.64="res://GDClip/bin/x11/libgdclip.so"
+Windows.64="res://GDClip/bin/win64/libgdclip.dll"
+OSX.64="res://GDClip/bin/osx/libgdclip.dylib"
+
+[dependencies]
+
+X11.64=[]
+Windows.64=[]
+OSX.64=[]
+```
+
+Update library paths if necessary.
+
+4. Load `gdclip.gdns` as a resource in an appropriate GDScript file.
+
+```
+onready var gdclip = preload("res://GDClip/bin/gdclip.gdns").new()
+```
+
+5. Access GDClip API functions as needed.
+
+```
+# get text from clipboard
+var text = gdclip.get_text()
+
+# write text to clipboard
+gdclip.set_text("Hello World")
+
+# clear clipboard
+gdclip.clear()
+
+# get image and image size from clipboard and add to scene
+var pbarray = gdclip.get_image_as_pbarray()
+var size = gdclip.get_image_size()
+var image = Image.new()
+image.create_from_data(size[0], size[1], false, Image.FORMAT_RGB8, pbarray)
+var texture = ImageTexture.new()
+texture.create_from_image(image)
+var spr = Sprite.new()
+spr.set_texture(texture)
+spr.position = [100, 100]
+SomeScene.add_child(spr)
+```
 
 ## Cross-Compile for Windows on Linux/macOS
 
