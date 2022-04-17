@@ -202,7 +202,7 @@ var texture = ImageTexture.new()
 texture.create_from_image(image)
 var spr = Sprite.new()
 spr.set_texture(texture)
-spr.position = [100, 100]
+spr.position = Vector2(100, 100)
 SomeScene.add_child(spr)
 ```
 
