@@ -66,6 +66,7 @@ bin/libgdclip.dylib: src/gdclip.osx.o src/gdlibrary.osx.o clip/clip.osx.o clip/c
 
 .PHONY: clean
 clean:
+	-rm bin/*
 	-rm demo/bin/*/*
 	-rm clip/*.o*
 	-rm src/*.o*
