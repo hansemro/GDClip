@@ -219,7 +219,7 @@ sudo pacman -S mingw-w64-gcc
 brew install mingw-w64
 ```
 
-2. Run `make PLATFORM=windows build`.
+2. Run `CXX=x86_64-w64-mingw32-g++ make PLATFORM=windows build`.
 
 3. Open demo in Godot and export Windows build.
 
