@@ -47,6 +47,9 @@ make PLATFORM=<linux|osx|windows> build
 If successful, you should see the image pasted in the center of the demo
 window.
 
+If cross-compiling, see [Wiki](https://github.com/hansemro/GDClip/wiki) for
+more information.
+
 ## GDClip API
 
 ### get_version
@@ -205,55 +208,6 @@ spr.set_texture(texture)
 spr.position = Vector2(100, 100)
 SomeScene.add_child(spr)
 ```
-
-## Cross-Compile for Windows on Linux/macOS
-
-Status: Builds with MinGW-w64 cross-compiler and works in Wine/Windows.
-
-1. Install mingw-w64.
-
-```
-# Arch Linux
-sudo pacman -S mingw-w64-gcc
-# macOS w/ brew
-brew install mingw-w64
-```
-
-2. Run `make PLATFORM=windows build`.
-
-3. Open demo in Godot and export Windows build.
-
-4. Test build with wine and enjoy :)
-
-## Cross-Compile for (x86_64) macOS/OSX on Linux
-
-Status: Builds in Darling environment and works in macOS.
-
-1. Install darling.
-
-```
-# Arch Linux
-yay -S darling-git
-```
-
-2. Download Command Line Tools for Xcode (12.4) from Apple Developer portal.
-
-3. Install Command Line Tools in darling shell.
-
-```
-$ darling shell
-Darling [.]$ hdiutil attach /path/to/Command_Line_tools_for_Xcode_12.4.dmg
-Darling [.]$ cd /Volumes/Command_Line_Tools_for_Xcode_12.4/
-Darling [.]$ /usr/bin/installer -pkg Command\ Line\ Tools.pkg -target /
-```
-
-4. Install [brew](https://brew.sh/) and dependencies in Darling environment.
-
-5. Build library with `make PLATFORM=osx build` in darling shell.
-
-6. Open demo in Godot and export OSX build.
-
-7. Run in real OSX environment and enjoy :)
 
 ## License
 - [clip](https://github.com/dacap/clip): MIT
