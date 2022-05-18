@@ -7,8 +7,12 @@ on:
     branches: [ main, actions-dev ]
 
 jobs:
-  build:
+  build-linux-x86_64:
     runs-on: ubuntu-latest
+    container:
+      image: hansemro/gdclip-docker:latest
+      volumes:
+        - ${{ github.workspace }}:/github/workspace
 
     steps:
     - uses: actions/checkout@v3
@@ -16,55 +20,80 @@ jobs:
         ref: build_test
         submodules: recursive
 
-    - name: Clone GDClip-docker for patches
-      uses: actions/checkout@v3
-      with:
-        repository: hansemro/GDClip-docker
-        path: GDClip-docker
-
-    - name: Apply patches to GDClip/godot-cpp
-      run: cd godot-cpp && git apply ../GDClip-docker/*.patch
-
-    - name: Pull hansemro/gdclip-docker:latest
-      run: docker pull hansemro/gdclip-docker:latest
-
     - name: Get gcc version
-      run: docker run --rm -t hansemro/gdclip-docker bash -c "gcc --version"
+      run: gcc --version
 
-    - name: Get o64-clang version
-      run: docker run --rm -t hansemro/gdclip-docker bash -c "o64-clang --version"
-
-    - name: Get mingw-w64-gcc version
-      run: docker run --rm -t hansemro/gdclip-docker bash -c "x86_64-w64-mingw32-gcc --version"
+    - run: git config --global --add safe.directory /github/workspace
 
     - name: Build for Linux (x86_64, release)
-      run: >-
-        docker run --rm -t
-        -u $(id -u $USER):$(id -g $USER)
-        -v "${{ github.workspace }}":"/github/workspace"
-        hansemro/gdclip-docker
-        bash -c "cd /github/workspace/ && make TARGET=release PLATFORM=linux NPROC=$(nproc)"
+      run: |
+        cd /github/workspace/
+        make TARGET=release PLATFORM=linux NPROC=$(nproc)
 
-    - name: Build for macOS (x86_64, release)
-      run: >-
-        docker run --rm -t
-        -u $(id -u $USER):$(id -g $USER)
-        -v "${{ github.workspace }}":"/github/workspace"
-        --env CXX=o64-clang++
-        hansemro/gdclip-docker
-        bash -c "cd /github/workspace/ && make TARGET=release PLATFORM=osx NPROC=$(nproc)"
-
-    - name: Build for Windows (x86_64, release)
-      run: >-
-        docker run --rm -t
-        -u $(id -u $USER):$(id -g $USER)
-        -v "${{ github.workspace }}":"/github/workspace"
-        --env CXX=x86_64-w64-mingw32-g++
-        hansemro/gdclip-docker
-        bash -c "cd /github/workspace/ && make TARGET=release PLATFORM=windows NPROC=$(nproc)"
-
-    - name: Upload built library artifacts
+    - name: Upload artifact
       uses: actions/upload-artifact@v3
       with:
-        path: ${{ github.workspace }}/bin/*
+        name: libgdclip-release
+        path: ${{ github.workspace }}/bin/libgdclip.so
+        retention-days: 14
+
+  build-macos-x86_64:
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: build_test
+        submodules: recursive
+
+    - uses: actions/setup-python@v3
+      with:
+        python-version: '3.10'
+
+    - name: Install scons
+      run: pip3 install scons
+
+    - name: Get clang version
+      run: clang --version
+
+    - name: Build for macOS (x86_64, release)
+      run: CXX=clang++ make TARGET=release PLATFORM=osx NPROC=$(sysctl -n hw.logicalcpu)
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: libgdclip-macos-x86_64-release
+        path: ${{ github.workspace }}/bin/libgdclip.dylib
+        retention-days: 14
+
+  build-windows-x86_64:
+    runs-on: ubuntu-latest
+    container:
+      image: hansemro/gdclip-docker:latest
+      env:
+        CXX: x86_64-w64-mingw32-g++
+      volumes:
+        - ${{ github.workspace }}:/github/workspace
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: build_test
+        submodules: recursive
+
+    - name: Get mingw-w64-gcc version
+      run: x86_64-w64-mingw32-gcc --version
+
+    - run: git config --global --add safe.directory /github/workspace
+
+    - name: Build for Windows (x86_64, release)
+      run: |
+        cd /github/workspace/
+        make TARGET=release PLATFORM=windows NPROC=$(nproc)
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: libgdclip-windows-x86_64-release
+        path: ${{ github.workspace }}/bin/libgdclip.dll
         retention-days: 14
