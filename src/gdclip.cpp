@@ -53,7 +53,7 @@ void GDClip::_init() {
  * Returns GDClip library version as String.
  */
 String GDClip::get_version() {
-    return String(version);
+    return String(LIBGDCLIP_VERSION);
 }
 
 /*
