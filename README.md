@@ -1,6 +1,6 @@
 # GDClip: Clip + Godot
 
-Version: v0.1
+Version: v0.2
 
 Language: GDNative (C++)
 
