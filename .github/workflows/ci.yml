@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, actions-dev ]
+  pull_request:
+    branches: [ main, actions-dev ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        ref: build_test
+        submodules: recursive
+
+    - name: Clone GDClip-docker for patches
+      uses: actions/checkout@v3
+      with:
+        repository: hansemro/GDClip-docker
+        path: GDClip-docker
+
+    - name: Apply patches to GDClip/godot-cpp
+      run: cd godot-cpp && git apply ../GDClip-docker/*.patch
+
+    - name: Pull hansemro/gdclip-docker:latest
+      run: docker pull hansemro/gdclip-docker:latest
+
+    - name: Get gcc version
+      run: docker run --rm -t hansemro/gdclip-docker bash -c "gcc --version"
+
+    - name: Get o64-clang version
+      run: docker run --rm -t hansemro/gdclip-docker bash -c "o64-clang --version"
+
+    - name: Get mingw-w64-gcc version
+      run: docker run --rm -t hansemro/gdclip-docker bash -c "x86_64-w64-mingw32-gcc --version"
+
+    - name: Build for Linux (x86_64, release)
+      run: >-
+        docker run --rm -t
+        -u $(id -u $USER):$(id -g $USER)
+        -v "${{ github.workspace }}":"/github/workspace"
+        hansemro/gdclip-docker
+        bash -c "cd /github/workspace/ && make TARGET=release PLATFORM=linux NPROC=$(nproc)"
+
+    - name: Build for macOS (x86_64, release)
+      run: >-
+        docker run --rm -t
+        -u $(id -u $USER):$(id -g $USER)
+        -v "${{ github.workspace }}":"/github/workspace"
+        --env CXX=o64-clang++
+        hansemro/gdclip-docker
+        bash -c "cd /github/workspace/ && make TARGET=release PLATFORM=osx NPROC=$(nproc)"
+
+    - name: Build for Windows (x86_64, release)
+      run: >-
+        docker run --rm -t
+        -u $(id -u $USER):$(id -g $USER)
+        -v "${{ github.workspace }}":"/github/workspace"
+        --env CXX=x86_64-w64-mingw32-g++
+        hansemro/gdclip-docker
+        bash -c "cd /github/workspace/ && make TARGET=release PLATFORM=windows NPROC=$(nproc)"
+
+    - name: Upload built library artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        path: ${{ github.workspace }}/bin/*
+        retention-days: 14
