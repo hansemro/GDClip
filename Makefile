@@ -8,7 +8,7 @@ CXXFLAGS = -O3 -std=c++14 -fPIC -I. -Igodot-cpp/ -Igodot-cpp/godot-headers -Igod
 CLIP_CXXFLAGS = -O3 -std=c++14 -fPIC -Iclip/
 LIBS = -Lgodot-cpp/bin
 WIN64_LIBFLAGS = ${LIBS} -lgodot-cpp.windows.${TARGET}.64 -lshlwapi -lwindowscodecs -lole32 -static-libgcc -static-libstdc++ -Wl,-Bstatic -lstdc++ -lpthread -Wl,-Bdynamic
-LINUX_LIBFLAGS = ${LIBS} -lgodot-cpp.linux.${TARGET}.64 -lpng -lpthread -lxcb
+LINUX_LIBFLAGS = ${LIBS} -lgodot-cpp.linux.${TARGET}.64 -static-libgcc -static-libstdc++ -lpng -lpthread -lxcb
 OSX_LIBFLAGS = ${LIBS} -lgodot-cpp.osx.${TARGET}.x86_64 -Wl,-framework,Cocoa
 
 .PHONY: all
