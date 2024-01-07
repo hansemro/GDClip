@@ -1,5 +1,7 @@
 # GDClip: Clip + Godot
 
+**Status: Unsupported as a similar feature now exists in Godot 4.2!**
+
 Version: v0.2
 
 Language: GDNative (C++)
