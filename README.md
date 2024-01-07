@@ -145,7 +145,7 @@ make PLATFORM=<linux|osx|windows> build
 ```
 [general]
 
-singleton=false
+singleton=true
 load_once=true
 symbol_prefix="godot_"
 reloadable=false
